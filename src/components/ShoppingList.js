@@ -1,24 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { ListItem } from './ListItem';
 import { CrossItem } from './crossItems';
 import { Context as ShoppingContext } from '../context/shoppingContext';
+import useSortandFilter from './customHooks/useCategory';
 
 const ShoppingList = () => {
   const {
-    state: { pendingItems, crossedOffItems, filteredString },
+    state: { crossedOffItems },
     crossOff,
     sendToPending,
   } = useContext(ShoppingContext);
-  const [categories, setCategories] = useState(
-    Arr(pendingItems.map((e) => e.category))
-  );
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [items, setItems] = useState([]);
-  useEffect(() => {
-    setItems(pendingItems);
-    setFilteredItems(items.filter((e) => e.item.includes(filteredString)));
-    setCategories(Arr(pendingItems.map((e) => e.category)));
-  }, [items, pendingItems, filteredString]);
+  const { categories, filteredItems } = useSortandFilter();
 
   return (
     <div className="topSpacer">
@@ -41,6 +33,7 @@ const ShoppingList = () => {
           <h3>All items have been Purchased, add new ones?</h3>
         )}
       </ul>
+
       <div className="divider"></div>
 
       <ul className="list right">
@@ -57,15 +50,6 @@ const ShoppingList = () => {
       </ul>
     </div>
   );
-};
-
-const Arr = (arr) => {
-  let a = [];
-  for (let b of arr) {
-    // eslint-disable-next-line no-unused-expressions
-    a.includes(b) ? null : a.push(b);
-  }
-  return a;
 };
 
 export default ShoppingList;
